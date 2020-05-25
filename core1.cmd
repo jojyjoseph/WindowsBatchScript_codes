@@ -1,8 +1,19 @@
-:: Tutorial starts from line 7
-:: it's prefered to add line 3-5 in the beginning. Will be discussed later.
+:: Tutorial starts from line 10
+:: it's prefered to add SETLOCAL ENABLEEXTENSIONS in the beginning. Will be discussed later.
 SETLOCAL ENABLEEXTENSIONS
+
+:: script global variables
 SET me=%~n0
 SET parent=%~dp0
+SET log=%TEMP%\%me%.txt
+
+::initializations
+@echo off 
+SETLOCAL 
+CALL :logfunction %newline% %me%": log starting at %DATE%, %TIME%"
+
+ECHO Initialization over. Comments section next.
+PAUSE
 
 REM This is comments
 
@@ -20,7 +31,8 @@ REM This comment will be shown.
 REM Following comments can be used as code comments and won't be executed unlike REM which echo in the command editor.
 :: Remarks, code comments.
 
-
+ECHO Comment section over. Variable section next.
+PAUSEE
 
 
 :: ############## Variables ######################
@@ -71,10 +83,13 @@ set PATH=D:/
 echo %PATH%
 ENDLOCAL
 
-REM Outside the local scope, shows the global value of foo
+ECHO Initialization done. Move ahead
+PAUSE
+
+:: Outside the local scope, shows the global value of foo
 echo %foo%
 
-REM Command line arguments passed to the script can be read by %0, %1, %n (argument position), Maximum 9 arguments are supported
+:: Command line arguments passed to the script can be read by %0, %1, %n (argument position), Maximum 9 arguments are supported
 :: echo %0 , will echo the name of the script itself
 echo %0
 :: echo %1, will show the first argument passed
@@ -83,3 +98,92 @@ echo %1
 :: Line 3-5 , SETLOCAL ENABLEEXTENSIONS - turns on command processors extension. variable me has the name of the script being called (without extension *.cmd) and parent holds the path of the script.
 echo %me% : file without extension
 echo %parent% : path to the file
+
+:: delayed expansion eg.
+@echo off
+SETLOCAL EnableDelayedExpansion
+Set "_var=first"
+Set "_var=second" & Echo %_var% !_var!
+
+:: Swapping example with delayed example
+Rem Delayed Expansion example
+set var1=first
+set var2=second
+set "var1=%var2%" & set "var2=%var1%"
+echo Var1 : %var1%
+echo Var2 : %var2%
+
+ECHO Variable section over. Function section next.
+PAUSE
+
+:: ############## Functions ######################
+REM ############## Functions ######################
+
+:: functions to be defined after the main exit code
+
+:: This next 3 lines is the way to invoke a function
+@echo off 
+SETLOCAL 
+CALL :logfunction "%me%: Hello, world!"
+
+:: This next 3 lines is the way to invoke a function with 2 parameters
+@echo off 
+SETLOCAL 
+CALL :Display 5,10
+
+:: Function to return value
+@echo off 
+SETLOCAL 
+CALL :SetValue value1,value2
+
+:: Test the return values
+echo on
+echo "Return Value1 : %value1%"
+echo "Return Value2 : %value2%"
+@echo off
+
+ECHO Function section over. Loop section next
+PAUSE
+:: ############## Loop ######################
+REM ############## Loop ####################
+
+:: Basic loop (1,1,100) means lowervalue =1 , increment =1, uppervalue =100, \L indicates that it's a loop; %%x is for variable declaration in loop.
+for /L %%x in (1, 1, 100) do (
+   echo %%x
+)
+
+ECHO Loop section over. Invoking other Batch script file section next
+PAUSE
+:: ############## Invoking Other Batch script file ######################
+REM ################ Invoking Other Batch script file ######################
+
+:: ################################ END OF EXECUTION CODE ###############################################
+ECHO Reached End of Execution
+PAUSE
+:: force execution to quit at the end of the "main" logic
+EXIT /B %ERRORLEVEL%
+
+:: ################################ FUNCTION DEFINITIONS #################################################
+
+:: a function tee to do logging
+:logfunction
+ECHO %* >> "%log%"
+ECHO %*
+ECHO %log% : log file updated 
+EXIT /B 0
+
+:: a function called with 2 parameters
+:Display
+echo The value of parameter 1 is %~1
+echo The value of parameter 2 is %~2
+EXIT /B 0
+
+:: a function with 2 return values
+:SetValue
+set "%~1=5"
+set "%~2=String"
+EXIT /B 0
+
+
+
+
