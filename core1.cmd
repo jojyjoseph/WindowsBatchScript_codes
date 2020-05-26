@@ -157,6 +157,8 @@ PAUSE
 :: ############## Invoking Other Batch script file ######################
 REM ################ Invoking Other Batch script file ######################
 
+CALL core1_support1.cmd argument1 argument2
+
 :: ################################ END OF EXECUTION CODE ###############################################
 ECHO Reached End of Execution
 PAUSE
