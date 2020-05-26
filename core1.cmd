@@ -14,6 +14,7 @@ CALL :logfunction %newline% %me%": log starting at %DATE%, %TIME%"
 
 ECHO Initialization over. Comments section next.
 PAUSE
+CLS
 
 REM This is comments
 
@@ -32,7 +33,8 @@ REM Following comments can be used as code comments and won't be executed unlike
 :: Remarks, code comments.
 
 ECHO Comment section over. Variable section next.
-PAUSEE
+PAUSE
+CLS
 
 
 :: ############## Variables ######################
@@ -85,6 +87,7 @@ ENDLOCAL
 
 ECHO Initialization done. Move ahead
 PAUSE
+CLS
 
 :: Outside the local scope, shows the global value of foo
 echo %foo%
@@ -115,6 +118,7 @@ echo Var2 : %var2%
 
 ECHO Variable section over. Function section next.
 PAUSE
+CLS
 
 :: ############## Functions ######################
 REM ############## Functions ######################
@@ -144,6 +148,7 @@ echo "Return Value2 : %value2%"
 
 ECHO Function section over. Loop section next
 PAUSE
+CLS
 :: ############## Loop ######################
 REM ############## Loop ####################
 
@@ -154,14 +159,35 @@ for /L %%x in (1, 1, 100) do (
 
 ECHO Loop section over. Invoking other Batch script file section next
 PAUSE
+CLS
 :: ############## Invoking Other Batch script file ######################
 REM ################ Invoking Other Batch script file ######################
 
 CALL core1_support1.cmd argument1 argument2
 
+ECHO Invoking other Batch script file section over. Invoking other executable from Batch script
+PAUSE
+CLS
+:: ############## Invoking Other Executable ######################
+REM ################ Invoking Other Executable ######################
+
+echo "Invoke pwd"
+pwd
+
+echo "Invoke a specific executable"
+
+SETLOCAL
+set PATH=C:\cygwin64\Downloads\bin\
+::depends on local system. So deactivated for the sample purpose
+::sed
+ENDLOCAL
+
+
+
 :: ################################ END OF EXECUTION CODE ###############################################
 ECHO Reached End of Execution
 PAUSE
+CLS
 :: force execution to quit at the end of the "main" logic
 EXIT /B %ERRORLEVEL%
 
